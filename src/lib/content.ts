@@ -4,7 +4,7 @@ import { allSlugs, getEntryBySlug } from "./menu-config";
 
 const CONTENT_DIR =
   process.env.CONTENT_DIR ||
-  path.join(process.cwd(), "..", "FrontendInterviewBook");
+  path.join(process.cwd(), "FrontendInterviewBook");
 
 function getContentPath(file: string): string {
   return path.join(CONTENT_DIR, file);
