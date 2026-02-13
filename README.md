@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend Interview Book
 
-## Getting Started
+A Next.js app that turns the **FrontendInterviewBook** markdown content into a readable, navigable site with a sidebar menu, dark/light theme, and progress tracking.
 
-First, run the development server:
+## Features
+
+- **Menu from README**: Sidebar follows the structure of `FrontendInterviewBook/README.md` (Parts A–O, System Design Guide, Interview Strategy).
+- **Markdown content**: All `.md` files are rendered with correct heading hierarchy (H1–H4) and code blocks with a **Copy** button.
+- **Dark/Light mode**: Theme toggle in the header; respects system preference by default.
+- **Progress tracking**: "Mark as complete" per topic; progress persisted in `localStorage` and shown in the header bar.
+- **Time estimate**: ~X min read per page based on word count.
+- **Responsive**: Sidebar collapses to a drawer on small screens; menu button in the header opens it.
+
+## Setup
+
+Content is read from the sibling directory `../FrontendInterviewBook` (relative to the app). Run the app from the repo root or ensure that path exists.
+
+To use a custom content directory at build/time:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+CONTENT_DIR=/path/to/FrontendInterviewBook npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cd frontend-interview-app
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open [http://localhost:3000](http://localhost:3000). The home route redirects to the first section (Part A).
 
-## Learn More
+## Build
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build
+npm start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Static pages are generated for every slug (41 sections). If the build fails due to sandbox or network (e.g. font fetch), run with full permissions or use the system fonts already configured.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tech
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Next.js 14+** (App Router), **React 18**, **TypeScript**
+- **Tailwind CSS** for layout and theme
+- **react-markdown**, **remark-gfm**, **rehype-slug** for rendering
+- **next-themes** for dark/light mode
