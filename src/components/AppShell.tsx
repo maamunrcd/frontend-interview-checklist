@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Header } from "./Header";
 import { Sidebar } from "./Sidebar";
 import { ScrollSpyProvider, ScrollSpyObserver } from "@/lib/scroll-spy";
+import { MEDIA_MOBILE } from "@/lib/breakpoints";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -12,7 +13,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 640px)");
+    const mq = window.matchMedia(MEDIA_MOBILE);
     setMobile(mq.matches);
     const handler = () => setMobile(mq.matches);
     mq.addEventListener("change", handler);
@@ -48,7 +49,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             onClose={mobile ? () => setSidebarOpen(false) : undefined}
             mobile={mobile}
           />
-          <main className="min-w-0 flex-1 overflow-auto">
+          <main className="min-w-0 flex-1 overflow-x-hidden overflow-y-auto">
             {children}
             <ScrollSpyObserver />
           </main>

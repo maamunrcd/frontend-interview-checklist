@@ -22,7 +22,7 @@ export function ContentRenderer({
   readTimeMinutes,
 }: ContentRendererProps) {
   return (
-    <article className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8 min-h-full bg-[var(--surface)] text-[var(--foreground)]">
+    <article className="mx-auto min-h-full max-w-3xl bg-[var(--surface)] px-4 py-6 text-[var(--foreground)] sm:px-6 sm:py-8 lg:px-8">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         {onMarkComplete && (
           <label className="flex cursor-pointer items-center gap-2">
@@ -53,7 +53,7 @@ export function ContentRenderer({
             h1({ node, ...props }) {
               return (
                 <h1
-                  className="scroll-mt-24 text-3xl font-bold tracking-tight text-[var(--foreground)] md:text-4xl"
+                  className="scroll-mt-20 text-2xl font-bold tracking-tight text-[var(--foreground)] sm:text-3xl md:scroll-mt-24 md:text-4xl"
                   {...props}
                 />
               );
@@ -61,7 +61,7 @@ export function ContentRenderer({
             h2({ node, ...props }) {
               return (
                 <h2
-                  className="scroll-mt-24 mt-10 border-b border-[var(--border)] pb-2 text-2xl font-semibold tracking-tight text-[var(--foreground)] md:mt-12 md:text-3xl"
+                  className="scroll-mt-20 mt-8 border-b border-[var(--border)] pb-2 text-xl font-semibold tracking-tight text-[var(--foreground)] sm:text-2xl md:mt-12 md:scroll-mt-24 md:text-3xl"
                   {...props}
                 />
               );
@@ -69,7 +69,7 @@ export function ContentRenderer({
             h3({ node, ...props }) {
               return (
                 <h3
-                  className="scroll-mt-24 mt-8 text-xl font-semibold text-[var(--foreground)] md:text-2xl"
+                  className="scroll-mt-20 mt-6 text-lg font-semibold text-[var(--foreground)] sm:text-xl md:mt-8 md:scroll-mt-24 md:text-2xl"
                   {...props}
                 />
               );
@@ -77,7 +77,7 @@ export function ContentRenderer({
             h4({ node, ...props }) {
               return (
                 <h4
-                  className="interview-question-heading scroll-mt-24 mt-10 border-t border-[var(--border)] pt-6 text-lg font-medium text-[var(--foreground)] md:text-xl"
+                  className="interview-question-heading scroll-mt-20 mt-6 border-t border-[var(--border)] pt-4 text-base font-medium text-[var(--foreground)] sm:mt-8 sm:pt-6 sm:text-lg md:scroll-mt-24 md:text-xl"
                   {...props}
                 />
               );

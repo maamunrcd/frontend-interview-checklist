@@ -18,14 +18,14 @@ export function Header({ onMenuClick }: HeaderProps) {
   useEffect(() => setMounted(true), []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--surface)] backdrop-blur">
-      <div className="flex h-14 w-full items-center justify-between gap-4 px-4 sm:px-6">
+    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--surface)] backdrop-blur pl-[env(safe-area-inset-left)]">
+      <div className="flex h-14 min-h-[3.5rem] w-full items-center justify-between gap-2 px-3 sm:gap-4 sm:px-6">
         <div className="flex items-center gap-2">
           {onMenuClick && (
             <button
               type="button"
               onClick={onMenuClick}
-              className="rounded-lg p-2 text-[var(--foreground-muted)] hover:bg-[var(--surface-muted)] sm:hidden"
+              className="min-h-[44px] min-w-[44px] rounded-lg p-2 text-[var(--foreground-muted)] hover:bg-[var(--surface-muted)] sm:hidden"
               aria-label="Open menu"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -35,11 +35,11 @@ export function Header({ onMenuClick }: HeaderProps) {
           )}
           <Link
             href="/"
-            className="flex items-center gap-2.5 font-semibold text-[var(--foreground)]"
+            className="flex min-h-[44px] min-w-[44px] items-center gap-2 font-semibold text-[var(--foreground)] sm:gap-2.5"
             aria-label="Frontend Interview Book home"
           >
-            <Logo className="h-8 w-8 shrink-0 text-emerald-600 dark:text-emerald-400" />
-            <span>Frontend Interview Book</span>
+            <Logo className="h-7 w-7 shrink-0 text-emerald-600 dark:text-emerald-400 sm:h-8 sm:w-8" />
+            <span className="truncate text-sm sm:text-base">Frontend Interview Book</span>
           </Link>
         </div>
         <div className="flex items-center gap-4">
@@ -58,7 +58,7 @@ export function Header({ onMenuClick }: HeaderProps) {
             <button
               type="button"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="rounded-lg p-2 text-[var(--foreground-muted)] hover:bg-[var(--surface-muted)] hover:text-[var(--foreground)]"
+              className="min-h-[44px] min-w-[44px] rounded-lg p-2 text-[var(--foreground-muted)] hover:bg-[var(--surface-muted)] hover:text-[var(--foreground)]"
               aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
             >
               {theme === "dark" ? (

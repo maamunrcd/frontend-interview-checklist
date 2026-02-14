@@ -10,9 +10,9 @@ Anyone can use this repo to browse the guide in the browser: sidebar navigation,
 
 - **Purpose:** Host and present the **Frontend Interview Book** content (JavaScript, React, Next.js, HTML/CSS, security, performance, system design, interview strategy, etc.) as a modern web app.
 - **Audience:** Developers preparing for senior frontend interviews; maintainers who want to edit content or extend the app.
-- **Content:** The app **reads markdown files at build time** from a **content directory** (by default a sibling folder `FrontendInterviewBook`). The menu and routes are driven by a config that maps slugs to those files.
+- **Content:** The app **reads markdown files at build time** from a **content directory**. By default it uses the `FrontendInterviewBook` folder **inside this repo** (so deployment to Vercel works without extra setup). You can override with the `CONTENT_DIR` env variable.
 
-So: **this repo is the “reader” app.** The actual interview content (`.md` files) can live in the same monorepo, a sibling repo, or a path you provide via env.
+So: **this repo includes both the app and the interview content** for a single deploy; you can still point to an external content path via `CONTENT_DIR` if needed.
 
 ---
 
@@ -27,6 +27,7 @@ So: **this repo is the “reader” app.** The actual interview content (`.md` f
 | **Read time** | ~X min read per page from word count. |
 | **Code blocks** | Syntax highlighting (Prism via `react-syntax-highlighter`), language label, Copy button, theme-aware background. |
 | **Responsive layout** | Sidebar becomes an overlay on small screens; header with menu button and fluid width. |
+| **PWA** | Installable (Add to Home Screen); optional install banner; offline shell caching; `manifest.json` and PNG icons (192/512). |
 
 ---
 
@@ -69,27 +70,24 @@ frontend-interview-app/
 └── README.md
 ```
 
-**Content (outside this app):**  
-Markdown files (e.g. `PART_A_QUICK_REFERENCE.md`) and optionally a `README.md` as the table of contents. The app does **not** bundle content; it expects a **content directory** at build time.
+**Content (in this repo):**  
+The `FrontendInterviewBook/` folder at the app root contains all markdown (e.g. `PART_A_QUICK_REFERENCE.md`). The app reads from it at build time so deployments (e.g. Vercel) work without extra configuration.
 
 ---
 
 ## Content Directory
 
-The app loads markdown from a **content directory**. By default it looks for a sibling folder named `FrontendInterviewBook`:
+The app loads markdown from a **content directory**. By default it uses the `FrontendInterviewBook` folder **inside this repo** (at the app root), so clone + build works for both local and Vercel.
 
-- **Default path:** `../FrontendInterviewBook` (relative to the app’s working directory when you run `next build` or `next dev`).
+- **Default path:** `FrontendInterviewBook/` (inside the project root).
 
-To use another path (e.g. in CI or another repo layout), set:
+To use an external path instead (e.g. another repo or CI layout), set:
 
 ```bash
 CONTENT_DIR=/absolute/path/to/your/markdown/folder npm run build
 ```
 
-(or `npm run dev`). All `.md` files referenced in `src/lib/menu-config.ts` must exist under `CONTENT_DIR`.
-
-**If you clone only this repo:**  
-You’ll need to either clone/copy the content repo into `../FrontendInterviewBook` or set `CONTENT_DIR` to where the markdown files live. Without that, the app will build but pages will be empty or 404.
+All `.md` files referenced in `src/lib/menu-config.ts` must exist under the content directory.
 
 ---
 
@@ -126,6 +124,7 @@ Static pages are generated for every slug defined in `menu-config.ts`.
 - **Menu and routes:** Edit `src/lib/menu-config.ts`. Each entry has a `slug`, `file` (e.g. `PART_A_QUICK_REFERENCE.md`), and optionally `subItems` (anchors for H2s in that file). The app uses this to build the sidebar and `/[slug]` routes.
 - **Content path:** Set `CONTENT_DIR` when running `next build` or `next dev` if your markdown is not in `../FrontendInterviewBook`.
 - **Theme (e.g. body/code background):** Edit CSS variables in `src/app/globals.css` (`:root` for light, `.dark` for dark).
+- **PWA icons:** PNGs are generated from `public/icon.svg`. Run `pnpm run generate-icons` after changing the icon (requires `sharp`).
 
 ---
 
@@ -142,6 +141,6 @@ Static pages are generated for every slug defined in `menu-config.ts`.
 |----------|--------|
 | **What is this?** | A Next.js web app that renders a structured frontend-interview markdown guide with sidebar, themes, and progress. |
 | **What is it for?** | Browsing and tracking progress through the Frontend Interview Book (senior frontend prep). |
-| **Where is the content?** | In a separate content directory (default: `../FrontendInterviewBook`), configurable via `CONTENT_DIR`. |
+| **Where is the content?** | In the `FrontendInterviewBook/` folder in this repo; override with `CONTENT_DIR` if needed. |
 | **How do I run it?** | `npm install && npm run dev` (and ensure the content directory exists or set `CONTENT_DIR`). |
 | **How do I change the menu?** | Edit `src/lib/menu-config.ts` and ensure the referenced `.md` files exist in the content directory. |

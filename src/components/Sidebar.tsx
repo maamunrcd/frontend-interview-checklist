@@ -43,10 +43,10 @@ export function Sidebar({ open = true, onClose, mobile = false }: SidebarProps) 
 
   const aside = (
     <aside
-      className={`flex w-64 shrink-0 flex-col border-r border-[var(--border)] bg-[var(--surface-muted)] ${
+      className={`flex shrink-0 flex-col border-r border-[var(--border)] bg-[var(--surface-muted)] ${
         mobile
-          ? "fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] transform transition-transform duration-200 ease-out"
-          : "sticky top-14 h-[calc(100vh-3.5rem)]"
+          ? "fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-[min(20rem,85vw)] transform transition-transform duration-200 ease-out"
+          : "sticky top-14 h-[calc(100vh-3.5rem)] w-64"
       } ${mobile && !open ? "-translate-x-full" : ""}`}
       aria-label="Book navigation"
     >
@@ -60,7 +60,7 @@ export function Sidebar({ open = true, onClose, mobile = false }: SidebarProps) 
                 <button
                   type="button"
                   onClick={() => toggleSection(sectionIndex)}
-                  className="flex w-full items-center justify-between gap-2 rounded-md px-3 py-2 text-left text-sm font-medium text-[var(--foreground)]"
+                  className="flex min-h-[44px] w-full items-center justify-between gap-2 rounded-md px-3 py-2.5 text-left text-sm font-medium text-[var(--foreground)]"
                   aria-expanded={isOpen}
                 >
                   <span className="flex min-w-0 items-center gap-2">
@@ -99,7 +99,7 @@ export function Sidebar({ open = true, onClose, mobile = false }: SidebarProps) 
                                   <li key={sub.anchor}>
                                     <Link
                                       href={href}
-                                      className={`flex items-center gap-2 rounded-md px-2 py-1.5 text-sm ${
+                                      className={`flex min-h-[44px] items-center gap-2 rounded-md px-2 py-2.5 text-sm sm:py-1.5 ${
                                         isActive
                                           ? "font-medium text-[var(--foreground)] bg-[var(--surface)]"
                                           : "text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--surface)]"
@@ -120,7 +120,7 @@ export function Sidebar({ open = true, onClose, mobile = false }: SidebarProps) 
                         <li key={entry.slug}>
                           <Link
                             href={`/${entry.slug}`}
-                            className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
+                            className={`flex min-h-[44px] items-center gap-2 rounded-md px-3 py-2.5 text-sm sm:py-2 ${
                               isActive
                                 ? "bg-[var(--surface)] font-medium text-[var(--foreground)]"
                                 : "text-[var(--foreground-muted)] hover:bg-[var(--surface)] hover:text-[var(--foreground)]"

@@ -32,7 +32,7 @@ export function CodeBlock({ className, children, node }: CodeBlockProps) {
 
   return (
     <div className="group relative my-4">
-      <div className="flex items-center justify-between gap-2 rounded-t-lg border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-2">
+      <div className="flex items-center justify-between gap-2 rounded-t-lg border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-2 sm:py-2.5">
         <span className="text-xs opacity-80">{lang}</span>
         <button
           type="button"
@@ -43,16 +43,15 @@ export function CodeBlock({ className, children, node }: CodeBlockProps) {
           {copied ? "Copied!" : "Copy"}
         </button>
       </div>
-      <div className="code-block-highlight overflow-hidden rounded-b-lg border border-t-0 border-[var(--border)]">
+      <div className="code-block-highlight overflow-x-auto overflow-y-hidden rounded-b-lg border border-t-0 border-[var(--border)]">
         <SyntaxHighlighter
           language={lang === "text" ? "plaintext" : lang}
           style={style}
           PreTag="pre"
           customStyle={{
             margin: 0,
-            padding: "1rem 1rem",
-            fontSize: "13px",
-            lineHeight: "20px",
+            padding: "0.75rem 1rem",
+            lineHeight: "1.4",
             background: "var(--code-bg)",
             border: "none",
             borderRadius: 0,
