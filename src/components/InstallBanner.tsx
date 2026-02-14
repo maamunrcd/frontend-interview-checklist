@@ -21,7 +21,7 @@ export function InstallBanner() {
 
     const handler = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt({ prompt: () => (e as { prompt: () => Promise<{ outcome: string }> }).prompt() });
+      setDeferredPrompt({ prompt: () => (e as unknown as { prompt: () => Promise<{ outcome: string }> }).prompt() });
       setShow(true);
     };
     window.addEventListener("beforeinstallprompt", handler);
