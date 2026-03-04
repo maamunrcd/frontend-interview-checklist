@@ -45,11 +45,13 @@ body {
 .code-block-highlight pre {
   font-size: 12px;
 }
+
 @media (min-width: 640px) {
   .code-block-highlight pre {
     font-size: 13px;
   }
 }
+
 .interview-prose pre {
   -webkit-overflow-scrolling: touch;
 }
@@ -62,34 +64,41 @@ body {
   margin-top: 0.75rem;
   margin-bottom: 1rem;
 }
+
 .interview-prose ul,
 .interview-prose ol {
   margin-top: 0.5rem;
   margin-bottom: 1rem;
   padding-left: 1.5rem;
 }
+
 .interview-prose li {
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
 }
+
 .interview-prose strong {
   font-weight: 600;
   color: var(--foreground);
 }
+
 .interview-prose,
 .interview-prose p,
 .interview-prose li {
   color: var(--foreground-muted);
 }
+
 .interview-prose h1,
 .interview-prose h2,
 .interview-prose h3,
 .interview-prose h4 {
   color: var(--foreground);
 }
+
 .interview-prose h2:first-of-type {
   margin-top: 0;
 }
+
 .interview-prose .interview-question-heading:first-of-type {
   margin-top: 0;
   border-top-width: 0;

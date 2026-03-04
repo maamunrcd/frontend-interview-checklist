@@ -23,6 +23,20 @@ export interface MenuSection {
 
 export const menuSections: MenuSection[] = [
   {
+    title: "INTERVIEW ROADMAP",
+    entries: [
+      {
+        title: "Frontend Interview Prep Roadmap",
+        slug: "interview-prep-roadmap",
+        file: "FRONTEND_INTERVIEW_PREP_ROADMAP.md",
+        subItems: [
+          { title: "Part 1: 30 Essential DSA Problems", anchor: "part-1-30-essential-dsa-problems" },
+          { title: "Part 2: 15 Machine Coding Challenges", anchor: "part-2-15-machine-coding-challenges" },
+        ],
+      },
+    ],
+  },
+  {
     title: "QUICK REFERENCE",
     entries: [
       {

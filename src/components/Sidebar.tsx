@@ -43,44 +43,47 @@ export function Sidebar({ open = true, onClose, mobile = false }: SidebarProps) 
 
   const aside = (
     <aside
-      className={`flex shrink-0 flex-col border-r border-[var(--border)] bg-[var(--surface-muted)] ${
+      className={`flex shrink-0 flex-col border-r border-[var(--border)] bg-[var(--surface-muted)]/50 backdrop-blur-xl ${
         mobile
-          ? "fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-[min(20rem,85vw)] transform transition-transform duration-200 ease-out"
-          : "sticky top-14 h-[calc(100vh-3.5rem)] w-64"
+          ? "fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-[min(20rem,85vw)] transform transition-transform duration-300 ease-in-out shadow-2xl"
+          : "sticky top-14 h-[calc(100vh-3.5rem)] w-72"
       } ${mobile && !open ? "-translate-x-full" : ""}`}
       aria-label="Book navigation"
     >
-      <nav className="flex-1 overflow-y-auto py-4" aria-label="Book menu">
-        <ul className="space-y-1 px-2">
+      <nav className="flex-1 overflow-y-auto py-6 px-4" aria-label="Book menu">
+        <ul className="space-y-4">
           {menuSections.map((section, sectionIndex) => {
             const isOpen = openSections[sectionIndex] ?? true;
-            const sectionCompleted = section.entries.some((e) => completedIds.has(e.slug));
+            const entriesCount = section.entries.length;
+            const completedInSection = section.entries.filter((e) => completedIds.has(e.slug)).length;
+            const sectionCompleted = completedInSection === entriesCount && entriesCount > 0;
+            
             return (
-              <li key={section.title}>
+              <li key={section.title} className="space-y-2">
                 <button
                   type="button"
                   onClick={() => toggleSection(sectionIndex)}
-                  className="flex min-h-[44px] w-full items-center justify-between gap-2 rounded-md px-3 py-2.5 text-left text-sm font-medium text-[var(--foreground)]"
+                  className="flex w-full items-center justify-between group py-1"
                   aria-expanded={isOpen}
                 >
-                  <span className="flex min-w-0 items-center gap-2">
-                    {sectionCompleted && (
-                      <span className="text-emerald-600 dark:text-emerald-400 shrink-0" aria-hidden>✓</span>
-                    )}
-                    <span className="truncate">{section.title}</span>
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <div className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${sectionCompleted ? "bg-emerald-500 shadow-sm shadow-emerald-500/50" : "bg-[var(--border)] group-hover:bg-[var(--accent)]"}`} />
+                    <span className="text-[0.65rem] uppercase tracking-widest font-bold text-[var(--foreground-muted)] group-hover:text-[var(--foreground)] transition-colors">
+                      {section.title}
+                    </span>
+                  </div>
                   <svg
-                    className={`h-4 w-4 shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`}
+                    className={`h-3 w-3 text-[var(--foreground-muted)] transition-transform duration-300 ${isOpen ? "rotate-90" : ""}`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
-                    aria-hidden
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
                   </svg>
                 </button>
+                
                 {isOpen && (
-                  <ul className="mt-1 space-y-0.5 pl-2">
+                  <ul className="space-y-1">
                     {section.entries.map((entry) => {
                       const hasSubItems = entry.subItems && entry.subItems.length > 0;
                       const isPageActive = entry.slug === currentSlug;
@@ -88,8 +91,11 @@ export function Sidebar({ open = true, onClose, mobile = false }: SidebarProps) 
 
                       if (hasSubItems) {
                         return (
-                          <li key={entry.slug} className="space-y-0.5">
-                            <ul className="space-y-0.5 border-l border-[var(--border)] pl-3">
+                          <li key={entry.slug} className="space-y-1">
+                            <div className={`px-3 py-1.5 text-xs font-semibold ${isPageActive ? "text-[var(--accent)]" : "text-[var(--foreground-muted)]"}`}>
+                              {entry.title}
+                            </div>
+                            <ul className="space-y-0.5 border-l-2 border-[var(--border)] ml-3.5 pl-4">
                               {entry.subItems!.map((sub) => {
                                 const href = `/${entry.slug}#${sub.anchor}`;
                                 const isSubActive = isPageActive && effectiveAnchor === sub.anchor;
@@ -99,13 +105,13 @@ export function Sidebar({ open = true, onClose, mobile = false }: SidebarProps) 
                                   <li key={sub.anchor}>
                                     <Link
                                       href={href}
-                                      className={`flex min-h-[44px] items-center gap-2 rounded-md px-2 py-2.5 text-sm sm:py-1.5 ${
+                                      className={`block py-1.5 px-2 rounded-md text-sm transition-all duration-200 ${
                                         isActive
-                                          ? "font-medium text-[var(--foreground)] bg-[var(--surface)]"
-                                          : "text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--surface)]"
+                                          ? "text-[var(--foreground)] font-medium bg-[var(--surface)] shadow-sm"
+                                          : "text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--surface)]/50"
                                       }`}
                                     >
-                                      <span className="truncate">{sub.title}</span>
+                                      {sub.title}
                                     </Link>
                                   </li>
                                 );
@@ -120,16 +126,20 @@ export function Sidebar({ open = true, onClose, mobile = false }: SidebarProps) 
                         <li key={entry.slug}>
                           <Link
                             href={`/${entry.slug}`}
-                            className={`flex min-h-[44px] items-center gap-2 rounded-md px-3 py-2.5 text-sm sm:py-2 ${
+                            className={`flex items-center justify-between group px-3 py-2.5 rounded-xl transition-all duration-300 ${
                               isActive
-                                ? "bg-[var(--surface)] font-medium text-[var(--foreground)]"
-                                : "text-[var(--foreground-muted)] hover:bg-[var(--surface)] hover:text-[var(--foreground)]"
+                                ? "bg-[var(--surface)] shadow-md shadow-black/5 ring-1 ring-black/5 text-[var(--foreground)]"
+                                : "text-[var(--foreground-muted)] hover:bg-[var(--surface)]/60 hover:text-[var(--foreground)] transform hover:translate-x-1"
                             }`}
                           >
+                            <span className={`text-sm ${isActive ? "font-semibold" : "font-medium"}`}>
+                              {entry.title}
+                            </span>
                             {isCompleted && (
-                              <span className="text-emerald-600 dark:text-emerald-400 shrink-0" aria-hidden>✓</span>
+                              <svg className="h-4 w-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                              </svg>
                             )}
-                            <span className="truncate">{entry.title}</span>
                           </Link>
                         </li>
                       );
@@ -149,9 +159,8 @@ export function Sidebar({ open = true, onClose, mobile = false }: SidebarProps) 
       <>
         {open && (
           <div
-            className="fixed inset-0 top-14 z-30 bg-black/50"
+            className="fixed inset-0 top-0 z-30 bg-black/20 backdrop-blur-sm transition-opacity duration-300"
             onClick={onClose}
-            onKeyDown={(e) => e.key === "Escape" && onClose?.()}
             role="button"
             tabIndex={0}
             aria-label="Close menu"

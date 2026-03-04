@@ -41,7 +41,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <ScrollSpyProvider>
-      <div className="flex min-h-screen flex-col">
+      <div className="flex min-h-screen flex-col bg-[var(--background)]">
         <Header onMenuClick={mobile ? () => setSidebarOpen(true) : undefined} />
         <div className="flex flex-1">
           <Sidebar
@@ -49,9 +49,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             onClose={mobile ? () => setSidebarOpen(false) : undefined}
             mobile={mobile}
           />
-          <main className="min-w-0 flex-1 overflow-x-hidden overflow-y-auto">
-            {children}
+          <main className="min-w-0 flex-1 overflow-x-hidden overflow-y-auto selection:bg-emerald-100 selection:text-emerald-900 dark:selection:bg-emerald-900/40 dark:selection:text-emerald-200">
+            <div className="mx-auto min-h-screen">
+              {children}
+            </div>
             <ScrollSpyObserver />
+            <footer className="mt-20 border-t border-[var(--border)] py-12 px-8 text-center bg-[var(--surface-muted)]/30">
+              <p className="text-xs font-bold uppercase tracking-widest text-[var(--foreground-muted)]">
+                &copy; {new Date().getFullYear()} Theysaid — Premium Interview Prep
+              </p>
+            </footer>
           </main>
         </div>
       </div>

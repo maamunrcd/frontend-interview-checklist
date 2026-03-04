@@ -6,6 +6,11 @@
 
 ---
 
+### **🚀 INTERVIEW ROADMAP**
+→ [FRONTEND_INTERVIEW_PREP_ROADMAP.md](FRONTEND_INTERVIEW_PREP_ROADMAP.md)
+1. Part 1: 30 Essential DSA Problems
+2. Part 2: 15 Machine Coding Challenges
+
 ### **QUICK REFERENCE (Interview Day Ready)**  
 → [PART_A_QUICK_REFERENCE.md](PART_A_QUICK_REFERENCE.md)
 1. Top 50 Most Asked Questions

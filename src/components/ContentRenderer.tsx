@@ -1,10 +1,12 @@
 "use client";
 
+import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import { CodeBlock } from "./CodeBlock";
+import { useProgress } from "@/lib/progress";
 
 interface ContentRendererProps {
   content: string;
@@ -21,25 +23,32 @@ export function ContentRenderer({
   isCompleted,
   readTimeMinutes,
 }: ContentRendererProps) {
+  const { completedIds, toggleComplete } = useProgress();
+
   return (
-    <article className="mx-auto min-h-full max-w-3xl bg-[var(--surface)] px-4 py-6 text-[var(--foreground)] sm:px-6 sm:py-8 lg:px-8">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+    <article className="mx-auto min-h-full max-w-5xl bg-[var(--surface)] px-4 py-8 text-[var(--foreground)] sm:px-8 sm:py-12 lg:px-12">
+      <div className="mb-10 flex flex-wrap items-center justify-between gap-4 border-b border-[var(--border)] pb-6">
         {onMarkComplete && (
-          <label className="flex cursor-pointer items-center gap-2">
+          <label className="flex cursor-pointer items-center gap-3 group">
             <input
               type="checkbox"
               checked={!!isCompleted}
               onChange={() => onMarkComplete(slug)}
-              className="h-4 w-4 rounded border-[var(--border)] text-emerald-600 focus:ring-emerald-500"
+              className="custom-checkbox group-hover:ring-4 group-hover:ring-[var(--ring)]"
               aria-label="Mark as complete"
             />
-            <span className="text-sm text-[var(--foreground-muted)]">Mark as complete</span>
+            <span className="text-sm font-medium text-[var(--foreground-muted)] group-hover:text-[var(--foreground)] transition-colors italic">
+              Mark this section as complete
+            </span>
           </label>
         )}
         {readTimeMinutes != null && readTimeMinutes > 0 && (
-          <span className="text-sm text-[var(--foreground-muted)]">
+          <div className="flex items-center gap-1.5 text-sm font-medium text-[var(--foreground-muted)] bg-[var(--surface-muted)] px-3 py-1 rounded-full border border-[var(--border)]">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
             ~{readTimeMinutes} min read
-          </span>
+          </div>
         )}
       </div>
       <div className="interview-prose prose prose-neutral max-w-none">
@@ -53,7 +62,7 @@ export function ContentRenderer({
             h1({ node, ...props }) {
               return (
                 <h1
-                  className="scroll-mt-20 text-2xl font-bold tracking-tight text-[var(--foreground)] sm:text-3xl md:scroll-mt-24 md:text-4xl"
+                  className="scroll-mt-20 text-3xl font-extrabold tracking-tight text-[var(--foreground)] sm:text-4xl md:scroll-mt-24 md:text-5xl mb-8"
                   {...props}
                 />
               );
@@ -61,7 +70,7 @@ export function ContentRenderer({
             h2({ node, ...props }) {
               return (
                 <h2
-                  className="scroll-mt-20 mt-8 border-b border-[var(--border)] pb-2 text-xl font-semibold tracking-tight text-[var(--foreground)] sm:text-2xl md:mt-12 md:scroll-mt-24 md:text-3xl"
+                  className="scroll-mt-20 mt-12 border-b border-[var(--border)] pb-4 text-2xl font-bold tracking-tight text-[var(--foreground)] sm:text-3xl md:mt-16 md:scroll-mt-24 md:text-4xl mb-8"
                   {...props}
                 />
               );
@@ -69,7 +78,7 @@ export function ContentRenderer({
             h3({ node, ...props }) {
               return (
                 <h3
-                  className="scroll-mt-20 mt-6 text-lg font-semibold text-[var(--foreground)] sm:text-xl md:mt-8 md:scroll-mt-24 md:text-2xl"
+                  className="scroll-mt-20 mt-8 text-xl font-bold text-[var(--foreground)] sm:text-2xl md:mt-10 md:scroll-mt-24 md:text-3xl mb-6"
                   {...props}
                 />
               );
@@ -77,7 +86,7 @@ export function ContentRenderer({
             h4({ node, ...props }) {
               return (
                 <h4
-                  className="interview-question-heading scroll-mt-20 mt-6 border-t border-[var(--border)] pt-4 text-base font-medium text-[var(--foreground)] sm:mt-8 sm:pt-6 sm:text-lg md:scroll-mt-24 md:text-xl"
+                  className="interview-question-heading scroll-mt-20 mt-8 border-t border-[var(--border)] pt-6 text-lg font-semibold text-[var(--foreground)] sm:mt-10 sm:pt-8 sm:text-xl md:scroll-mt-24 md:text-2xl mb-4"
                   {...props}
                 />
               );
@@ -86,7 +95,7 @@ export function ContentRenderer({
               const isInline = !className;
               if (isInline) {
                 return (
-                  <code className="rounded bg-[var(--surface-muted)] px-1.5 py-0.5 text-sm border border-[var(--border)]" {...props}>
+                  <code className="rounded-md bg-[var(--surface-muted)] px-1.5 py-0.5 text-sm font-mono border border-[var(--border)] font-medium text-[var(--accent)]" {...props}>
                     {children}
                   </code>
                 );
@@ -98,10 +107,66 @@ export function ContentRenderer({
               );
             },
             p({ node, ...props }) {
-              return <p className="my-3 leading-7 text-[var(--foreground-muted)]" {...props} />;
+              return <p className="my-4 leading-relaxed text-[var(--foreground-muted)] text-[1.05rem]" {...props} />;
+            },
+            li({ node, children, className, ...props }) {
+              const isTaskList = className?.includes("task-list-item");
+              if (isTaskList) {
+                // Helper to get all text from nested nodes
+                const getTaskText = (n: any): string => {
+                  if (n.type === "text") return n.value;
+                  if (n.children) return n.children.map(getTaskText).join("");
+                  return "";
+                };
+
+                const textContent = (node as any).children
+                  .filter((c: any) => c.tagName !== "input")
+                  .map(getTaskText)
+                  .join("")
+                  .trim();
+
+                const taskId = `${slug}#${textContent}`;
+                const isTaskDone = completedIds.has(taskId);
+
+                // Deep filter to remove initial checkboxes rendered by GFM
+                const filterChildren = (children: any): any => {
+                  return React.Children.map(children, (child) => {
+                    if (child?.type === "input" && child?.props?.type === "checkbox") {
+                      return null;
+                    }
+                    if (child?.props?.children) {
+                      return React.cloneElement(child, {
+                        ...child.props,
+                        children: filterChildren(child.props.children)
+                      });
+                    }
+                    return child;
+                  });
+                };
+
+                return (
+                  <li className="card-item relative mb-4 flex items-start gap-4 p-5 list-none group" {...props}>
+                    <div className="flex items-center h-6 mt-1">
+                      <input
+                        type="checkbox"
+                        checked={isTaskDone}
+                        onChange={() => toggleComplete(taskId)}
+                        className="custom-checkbox group-hover:ring-4 group-hover:ring-[var(--ring)]"
+                        aria-label={textContent}
+                      />
+                    </div>
+                    <div className={`flex-1 ${isTaskDone ? "opacity-30 line-through grayscale italic text-[var(--foreground-muted)]" : ""} transition-all duration-300 [&_p]:my-0`}>
+                      <div className="text-[1.05rem] font-medium leading-relaxed">
+                        {filterChildren(children)}
+                      </div>
+                    </div>
+                  </li>
+                );
+              }
+              return <li className="my-3 ml-6 list-disc text-[var(--foreground-muted)] leading-relaxed" {...props}>{children}</li>;
             },
             hr({ node, ...props }) {
-              return <hr className="my-8 border-[var(--border)]" {...props} />;
+              return <hr className="my-12 border-[var(--border)]" {...props} />;
             },
           }}
         >

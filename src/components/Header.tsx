@@ -18,64 +18,73 @@ export function Header({ onMenuClick }: HeaderProps) {
   useEffect(() => setMounted(true), []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--surface)] backdrop-blur pl-[env(safe-area-inset-left)]">
-      <div className="flex h-14 min-h-[3.5rem] w-full items-center justify-between gap-2 px-3 sm:gap-4 sm:px-6">
-        <div className="flex items-center gap-2">
+    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--surface)]/80 backdrop-blur-xl pl-[env(safe-area-inset-left)] transition-all duration-300">
+      <div className="flex h-16 w-full items-center justify-between gap-4 px-4 sm:px-8">
+        <div className="flex items-center gap-4">
           {onMenuClick && (
             <button
               type="button"
               onClick={onMenuClick}
-              className="min-h-[44px] min-w-[44px] rounded-lg p-2 text-[var(--foreground-muted)] hover:bg-[var(--surface-muted)] sm:hidden"
+              className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--surface-muted)] text-[var(--foreground-muted)] hover:bg-[var(--border)] transition-colors sm:hidden shadow-sm"
               aria-label="Open menu"
             >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
               </svg>
             </button>
           )}
           <Link
             href="/"
-            className="flex min-h-[44px] min-w-[44px] items-center gap-2 font-semibold text-[var(--foreground)] sm:gap-2.5"
+            className="flex items-center gap-3 transition-transform hover:scale-105 active:scale-95"
             aria-label="Frontend Interview Book home"
           >
-            <Logo className="h-7 w-7 shrink-0 text-emerald-600 dark:text-emerald-400 sm:h-8 sm:w-8" />
-            <span className="truncate text-sm sm:text-base">Frontend Interview Book</span>
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/10 dark:text-emerald-400 shadow-inner ring-1 ring-emerald-500/20">
+              <Logo className="h-6 w-6" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-base font-bold tracking-tight text-[var(--foreground)] leading-none">Frontend 
+</span>
+              <span className="text-[0.65rem] font-bold uppercase tracking-wider text-emerald-600/80 dark:text-emerald-400/80">Interview Guideline</span>
+            </div>
           </Link>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="hidden items-center gap-2 sm:flex" aria-label="Progress">
-            <span className="text-sm text-[var(--foreground-muted)]">
-              {completedCount}/{totalCount}
-            </span>
-            <div className="h-2 w-24 overflow-hidden rounded-full bg-[var(--surface-muted)]">
-              <div
-                className="h-full rounded-full bg-emerald-500 transition-all duration-300"
-                style={{ width: `${progressPercent}%` }}
-              />
+
+        <div className="flex items-center gap-6">
+          <div className="hidden items-center gap-4 sm:flex" aria-label="Global Progress">
+            <div className="flex flex-col items-end gap-1">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-[var(--foreground)]">{progressPercent}%</span>
+                <span className="text-[0.65rem] font-semibold text-[var(--foreground-muted)] uppercase tracking-wider">Completed</span>
+              </div>
+              <div className="h-1.5 w-32 overflow-hidden rounded-full bg-[var(--surface-muted)] ring-1 ring-black/5">
+                <div
+                  className="h-full rounded-full bg-emerald-500 transition-all duration-700 ease-out shadow-[0_0_8px_rgba(16,185,129,0.4)]"
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
             </div>
           </div>
-          {mounted && (
-            <button
-              type="button"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="min-h-[44px] min-w-[44px] rounded-lg p-2 text-[var(--foreground-muted)] hover:bg-[var(--surface-muted)] hover:text-[var(--foreground)]"
-              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-            >
-              {theme === "dark" ? (
-                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden>
-                  <path
-                    fillRule="evenodd"
-                    d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              ) : (
-                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden>
-                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                </svg>
-              )}
-            </button>
-          )}
+
+          <div className="flex items-center gap-2 border-l border-[var(--border)] pl-4">
+            {mounted && (
+              <button
+                type="button"
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--surface-muted)] text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--border)] transition-all duration-300 shadow-sm"
+                aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              >
+                {theme === "dark" ? (
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                  </svg>
+                ) : (
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
+                )}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </header>
